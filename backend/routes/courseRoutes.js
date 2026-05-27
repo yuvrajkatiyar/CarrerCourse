@@ -10,11 +10,28 @@ const router = express.Router();
 /* GET ALL COURSES */
 
 router.get("/", async (req, res) => {
+  const { category, level, search, platform } = req.query;
+  const filter = {};
+
+  if (category) {
+    filter.category = new RegExp(`^${category}$`, "i");
+  }
+
+  if (level) {
+    filter.level = new RegExp(`^${level}$`, "i");
+  }
+
+  if (platform) {
+    filter.platform = platform;
+  }
+
+  if (search) {
+    filter.title = new RegExp(search, "i");
+  }
 
   try {
-
     const courses =
-      await Course.find();
+      await Course.find(filter);
 
     res.json(courses);
 

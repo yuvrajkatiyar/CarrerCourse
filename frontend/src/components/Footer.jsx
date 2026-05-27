@@ -75,7 +75,7 @@ export default function Footer() {
 
             <div className="flex flex-col gap-4 text-sm text-gray-500">
 
-              <Link to="/courses">
+              <Link to="/course">
                 Browse Courses
               </Link>
 

@@ -234,7 +234,7 @@ export default function HomePage() {
 
             <div className="flex flex-wrap gap-4 justify-center">
               <Link
-                to="/courses"
+                to="/course"
                 className="px-8 py-3 bg-white text-indigo-600 rounded-lg hover:bg-white/90 transition-colors font-medium inline-flex items-center gap-2"
               >
                 Explore Courses

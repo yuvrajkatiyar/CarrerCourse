@@ -15,27 +15,27 @@ const questions = [
     question: "What interests you most?",
     options: [
       {
-        value: "building-things",
+        value: "Web Development",
         label: "Building websites and applications",
         icon: "🏗️",
       },
       {
-        value: "data-analysis",
+        value: "Data Science",
         label: "Analyzing data and finding insights",
         icon: "📊",
       },
       {
-        value: "creative-design",
+        value: "UI/UX Design",
         label: "Creating beautiful designs and experiences",
         icon: "🎨",
       },
       {
-        value: "problem-solving",
+        value: "Cloud Computing",
         label: "Solving complex technical problems",
         icon: "🧩",
       },
       {
-        value: "business",
+        value: "Business & Marketing",
         label: "Growing businesses and marketing",
         icon: "📈",
       },
@@ -47,17 +47,17 @@ const questions = [
     question: "What is your experience level?",
     options: [
       {
-        value: "beginner",
+        value: "Beginner",
         label: "Complete Beginner",
         icon: "🌱",
       },
       {
-        value: "intermediate",
+        value: "Intermediate",
         label: "Intermediate",
         icon: "📚",
       },
       {
-        value: "advanced",
+        value: "Advanced",
         label: "Advanced",
         icon: "🚀",
       },
@@ -89,63 +89,6 @@ const questions = [
 
 
 
-const careerPaths = {
-  "building-things": {
-    title: "Web Developer",
-    description:
-      "Build websites and web applications.",
-    skills: [
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "React",
-    ],
-  },
-
-  "data-analysis": {
-    title: "Data Scientist",
-    description:
-      "Analyze data and build ML models.",
-    skills: [
-      "Python",
-      "Machine Learning",
-      "SQL",
-    ],
-  },
-
-  "creative-design": {
-    title: "UI/UX Designer",
-    description:
-      "Design beautiful user experiences.",
-    skills: [
-      "Figma",
-      "UI Design",
-      "UX Research",
-    ],
-  },
-
-  "problem-solving": {
-    title: "Cloud Engineer",
-    description:
-      "Manage cloud infrastructure.",
-    skills: [
-      "AWS",
-      "Docker",
-      "Kubernetes",
-    ],
-  },
-
-  business: {
-    title: "Digital Marketer",
-    description:
-      "Grow businesses online.",
-    skills: [
-      "SEO",
-      "Marketing",
-      "Analytics",
-    ],
-  },
-};
 
 
 
@@ -163,12 +106,16 @@ export default function CareerQuizPage() {
   const [career, setCareer] =
     useState(null);
 
+   const [recommendedCourses, setRecommendedCourses] = useState([]);
 
 
   const currentAnswer =
     answers[questions[currentQuestion].id];
 
 
+  const [coursesLoading, setCoursesLoading] = useState(false);
+
+  const [coursesError, setCoursesError] = useState("");
 
   const handleAnswer = (value) => {
 
@@ -192,13 +139,67 @@ export default function CareerQuizPage() {
       );
 
     } else {
+      setCareer({
 
-      const result =
-        careerPaths[answers[1]];
+  title: answers[1],
 
-      setCareer(result);
+  description:
+    `Recommended learning path for ${answers[1]}.`,
 
+  skills: [],
+
+});
       setShowResult(true);
+      fetchRecommendedCourses(
+        answers[1],
+        answers[2]
+      );
+    }
+  };
+
+  const fetchRecommendedCourses = async (
+    interest,
+    level
+  ) => {
+    setCoursesLoading(true);
+    setCoursesError("");
+    setRecommendedCourses([]);
+
+    try {
+      const category = interest;
+      const params = new URLSearchParams();
+
+      if (category) {
+        params.append("category", category);
+      }
+
+      if (level) {
+        params.append("level", level);
+      }
+
+      const url =
+        "http://localhost:5000/api/courses" +
+        (params.toString()
+          ? `?${params.toString()}`
+          : "");
+
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (Array.isArray(data)) {
+        setRecommendedCourses(data);
+      } else {
+        setCoursesError(
+          "Unexpected response from server."
+        );
+      }
+    } catch (error) {
+      console.error(error);
+      setCoursesError(
+        "Unable to load recommended courses."
+      );
+    } finally {
+      setCoursesLoading(false);
     }
   };
 
@@ -225,6 +226,10 @@ export default function CareerQuizPage() {
     setShowResult(false);
 
     setCareer(null);
+
+    setRecommendedCourses([]);
+    setCoursesLoading(false);
+    setCoursesError("");
   };
 
 
@@ -288,6 +293,63 @@ export default function CareerQuizPage() {
                 Restart Quiz
               </button>
 
+            </div>
+
+            <div className="mt-10">
+              <h2 className="text-xl font-semibold mb-4">
+                Recommended Courses
+              </h2>
+
+              {coursesLoading ? (
+                <p className="text-gray-500">
+                  Loading courses...
+                </p>
+              ) : coursesError ? (
+                <p className="text-red-500">
+                  {coursesError}
+                </p>
+              ) : recommendedCourses.length ? (
+                <div className="grid md:grid-cols-2 gap-4">
+                  {recommendedCourses.map((course) => (
+                    <div
+                      key={course._id}
+                      className="border border-gray-200 rounded-2xl p-5"
+                    >
+                      <div className="mb-4">
+                        <h3 className="text-lg font-semibold">
+                          {course.title}
+                        </h3>
+                        <p className="text-sm text-gray-500">
+                          {course.platform} • {course.level}
+                        </p>
+                      </div>
+
+                      <p className="text-gray-600 mb-4">
+                        {course.description ||
+                          "Explore this course to learn more."}
+                      </p>
+
+                      <div className="flex items-center justify-between text-sm text-gray-500">
+                        <span>
+                          {course.price === 0 ? "Free" : `$${course.price}`}
+                        </span>
+                        <span>{course.duration}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500">
+                  No matching courses were found.{' '}
+                  <Link
+                    to="/courses"
+                    className="text-indigo-600"
+                  >
+                    Browse all courses
+                  </Link>
+                  .
+                </p>
+              )}
             </div>
 
           </div>
