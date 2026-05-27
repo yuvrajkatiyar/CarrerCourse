@@ -149,11 +149,11 @@ export default function CoursesPage() {
     <div className="min-h-screen bg-background">
       {/* HERO */}
 
-      <div className="bg-gradient-to-br from-primary to-secondary text-white py-12">
+      <div className="bg-gradient-to-br from-primary to-secondary text-black py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl md:text-4xl mb-4">Browse All Courses</h1>
 
-          <p className="text-white/90">
+          <p className="text-black/90">
             Explore {allCourses.length} courses from top platforms
           </p>
         </div>

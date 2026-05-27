@@ -32,7 +32,7 @@ export default function Navbar() {
               Home
             </Link>
 
-            <Link to="/courses" className="text-indigo-600 font-medium">
+            <Link to="/course" className="text-indigo-600 font-medium">
               Courses
             </Link>
 
