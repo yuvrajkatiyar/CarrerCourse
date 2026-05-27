@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 
 import { useState, useEffect } from "react";
+// import { search } from "../../../backend/routes/courseRoutes";
 
 const categories = [
   {
@@ -65,64 +66,6 @@ const categories = [
     name: "Business & Marketing",
     icon: TrendingUp,
     color: "from-orange-500 to-amber-500",
-  },
-];
-
-const defaultTopCourses = [
-  {
-    id: "1",
-    title: "Complete Web Development Bootcamp",
-    platform: "Udemy",
-    instructor: "Angela Yu",
-    price: 89.99,
-    rating: 4.7,
-    reviews: 278543,
-    duration: "52 hours",
-    level: "Beginner",
-    image:
-      "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800&q=80",
-  },
-
-  {
-    id: "2",
-    title: "Machine Learning Specialization",
-    platform: "Coursera",
-    instructor: "Andrew Ng",
-    price: 49.99,
-    rating: 4.9,
-    reviews: 156234,
-    duration: "3 months",
-    level: "Intermediate",
-    image:
-      "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80",
-  },
-
-  {
-    id: "3",
-    title: "UI/UX Design Masterclass",
-    platform: "Udemy",
-    instructor: "Daniel Walter Scott",
-    price: 79.99,
-    rating: 4.8,
-    reviews: 89432,
-    duration: "38 hours",
-    level: "All Levels",
-    image:
-      "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
-  },
-
-  {
-    id: "4",
-    title: "AWS Certified Solutions Architect",
-    platform: "A Cloud Guru",
-    instructor: "Ryan Kroonenburg",
-    price: 39.99,
-    rating: 4.6,
-    reviews: 124567,
-    duration: "24 hours",
-    level: "Advanced",
-    image:
-      "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80",
   },
 ];
 
@@ -181,7 +124,7 @@ export default function HomePage() {
     });
     const fetchTopCourses = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/course");
+        const response = await fetch("http://localhost:5000/api/courses");
         const data = await response.json();
         if (Array.isArray(data)) {
           const sorted = [...data].sort(
@@ -200,7 +143,7 @@ export default function HomePage() {
   }, []);
 
   const featuredCourses =
-    topCourses.length > 0 ? topCourses : defaultTopCourses;
+  topCourses;
 
   return (
     <div className="w-full">
@@ -369,59 +312,63 @@ export default function HomePage() {
               <p className="text-gray-500">Most popular courses</p>
             </div>
 
-            <Link to="/courses" className="text-indigo-600 font-medium">
+            <Link to="/course" className="text-indigo-600 font-medium">
               View All
             </Link>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {featuredCourses.map((course) => (
-              <Link key={course._id} to={`/courses/${course._id}`}>
-                <div
-                  key={course._id ?? course.id}
-                  className="bg-white rounded-xl shadow overflow-hidden"
-                >
-                  <img
-                    src={course.image}
-                    alt={course.title}
-                    className="w-full h-56 object-cover"
-                  />
+          {topCoursesLoading ? (
+            <p className="text-gray-500">Loading courses...</p>
+          ) : featuredCourses.length === 0 ? (
+            <p className="text-gray-500">No courses available</p>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-6">
+              {Array.isArray(featuredCourses) &&
+ featuredCourses.map((course) => (
+                <Link key={course._id} to={`/courses/${course._id}`}>
+                  <div className="bg-white rounded-xl shadow overflow-hidden hover:shadow-lg transition">
+                    <img
+                      src={course.image}
+                      alt={course.title}
+                      className="w-full h-56 object-cover"
+                    />
 
-                  <div className="p-6">
-                    <div className="flex justify-between mb-3">
-                      <span className="text-indigo-600 text-sm">
-                        {course.platform}
-                      </span>
+                    <div className="p-6">
+                      <div className="flex justify-between mb-3">
+                        <span className="text-indigo-600 text-sm">
+                          {course.platform}
+                        </span>
 
-                      <span className="font-medium">
-                        {course.price === 0 ? "Free" : `${course.price}Rs`}
-                      </span>
-                    </div>
-
-                    <h3 className="text-xl font-semibold mb-2">
-                      {course.title}
-                    </h3>
-
-                    <p className="text-gray-500 mb-4">{course.instructor}</p>
-
-                    <div className="flex justify-between text-sm text-gray-500">
-                      <div className="flex items-center gap-1">
-                        <Star className="w-4 h-4 text-yellow-500" />
-
-                        {(course.rating || 0).toFixed(1)}
+                        <span className="font-medium">
+                          {course.price === 0 ? "Free" : `${course.price}Rs`}
+                        </span>
                       </div>
 
-                      <div className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
+                      <h3 className="text-xl font-semibold mb-2">
+                        {course.title}
+                      </h3>
 
-                        {course.duration}
+                      <p className="text-gray-500 mb-4">{course.instructor}</p>
+
+                      <div className="flex justify-between text-sm text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 text-yellow-500" />
+
+                          {(course.rating || 0).toFixed(1)}
+                        </div>
+
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-4 h-4" />
+
+                          {course.duration}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
