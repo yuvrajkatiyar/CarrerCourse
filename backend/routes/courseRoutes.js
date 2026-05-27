@@ -26,7 +26,13 @@ router.get("/", async (req, res) => {
   }
 
   if (search) {
-    filter.title = new RegExp(search, "i");
+    const searchRegex = new RegExp(search, "i");
+    filter.$or = [
+      { title: searchRegex },
+      { category: searchRegex },
+      { platform: searchRegex },
+      { instructor: searchRegex },
+    ];
   }
 
   try {

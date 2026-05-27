@@ -161,16 +161,27 @@ export default function HomePage() {
 
   const [topCourses, setTopCourses] = useState([]);
   const [topCoursesLoading, setTopCoursesLoading] = useState(true);
-  
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState("");
+  const [searchExecuted, setSearchExecuted] = useState(false);
+
+  const handleSearch = () => {
+    const query = searchQuery.trim();
+
+    if (!query) return;
+
+    window.location.href = `/course?search=${encodeURIComponent(query)}`;
+  };
 
   useEffect(() => {
     window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+      top: 0,
+      behavior: "smooth",
+    });
     const fetchTopCourses = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/courses");
+        const response = await fetch("http://localhost:5000/api/course");
         const data = await response.json();
         if (Array.isArray(data)) {
           const sorted = [...data].sort(
@@ -229,12 +240,13 @@ export default function HomePage() {
                   />
                 </div>
 
-                <Link
-                  to="/courses"
+                <button
+                  type="button"
+                  onClick={handleSearch}
                   className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
                 >
                   Search
-                </Link>
+                </button>
               </div>
             </div>
 
@@ -259,6 +271,70 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {searchExecuted && (
+        <section className="py-12 bg-slate-50">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-3xl font-bold">Search Results</h2>
+                <p className="text-gray-500">
+                  Results for "{searchQuery.trim()}"
+                </p>
+              </div>
+            </div>
+
+            {searchLoading ? (
+              <p className="text-gray-600">Searching courses...</p>
+            ) : searchError ? (
+              <p className="text-red-500">{searchError}</p>
+            ) : searchResults.length ? (
+              <div className="grid md:grid-cols-2 gap-6">
+                {searchResults.map((course) => (
+                  <div
+                    key={course._id ?? course.id}
+                    className="bg-white rounded-xl shadow-sm overflow-hidden"
+                  >
+                    <img
+                      src={
+                        course.image ||
+                        "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&q=80"
+                      }
+                      alt={course.title}
+                      className="w-full h-56 object-cover"
+                    />
+                    <div className="p-6">
+                      <div className="flex justify-between mb-3">
+                        <span className="text-indigo-600 text-sm">
+                          {course.platform}
+                        </span>
+                        <span className="font-medium">
+                          {course.price === 0 ? "Free" : `$${course.price}`}
+                        </span>
+                      </div>
+                      <h3 className="text-xl font-semibold mb-2">
+                        {course.title}
+                      </h3>
+                      <p className="text-gray-500 mb-4">
+                        {course.instructor || course.category}
+                      </p>
+                      <div className="flex justify-between text-sm text-gray-500">
+                        <span>{course.level}</span>
+                        <span>{course.duration}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-600">
+                No courses found for "{searchQuery.trim()}".
+              </p>
+            )}
+          </div>
+        </section>
+      )}
+
       {/* CATEGORIES */}
 
       <section className="py-16 bg-gray-100">

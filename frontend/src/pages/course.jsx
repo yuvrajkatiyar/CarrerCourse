@@ -8,6 +8,8 @@ export default function CoursesPage() {
   const [searchParams] = useSearchParams();
   const [allCourses, setAllCourses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const search = searchParams.get("search");
+  console.log(search);
 
   //   const {
   //     addToWishlist,
@@ -41,9 +43,17 @@ export default function CoursesPage() {
   });
 
   useEffect(() => {
+ 
     const fetchCourses = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/courses");
+        let url = "http://localhost:5000/api/courses";
+
+        if (search) {
+          url += `?search=${search}`;
+        }
+
+        console.log(url);
+        const response = await fetch(url);
 
         const data = await response.json();
 
@@ -137,13 +147,13 @@ export default function CoursesPage() {
   //     }
   //   };
 
-//   if (loading) {
-//     return (
-//       <div className="min-h-screen flex items-center justify-center text-2xl">
-//         Loading Courses...
-//       </div>
-//     );
-//   }
+  //   if (loading) {
+  //     return (
+  //       <div className="min-h-screen flex items-center justify-center text-2xl">
+  //         Loading Courses...
+  //       </div>
+  //     );
+  //   }
 
   return (
     <div className="min-h-screen bg-background">
@@ -275,7 +285,7 @@ export default function CoursesPage() {
 
                         <span className="font-medium">{course.rating}</span>
 
-                        <span>({course.reviews?.toLocaleString()|| 0})</span>
+                        <span>({course.reviews?.toLocaleString() || 0})</span>
                       </div>
                     </div>
 
