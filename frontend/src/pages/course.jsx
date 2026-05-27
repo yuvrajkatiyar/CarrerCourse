@@ -248,7 +248,7 @@ export default function CoursesPage() {
                     </Link>
 
                     <div className="absolute top-3 right-3 bg-white/90 px-2 py-1 rounded-lg text-sm font-medium">
-                      {course.price === 0 ? "Free" : `$${course.price}`}
+                      {course.price === 0 ? "Free" : `${course.price}Rs`}
                     </div>
                   </div>
 

@@ -318,7 +318,7 @@ export default function HomePage() {
                       </span>
 
                       <span className="font-medium">
-                        {course.price === 0 ? "Free" : `$${course.price}`}
+                        {course.price === 0 ? "Free" : `${course.price}Rs`}
                       </span>
                     </div>
 

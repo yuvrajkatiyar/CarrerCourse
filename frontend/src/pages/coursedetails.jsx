@@ -199,7 +199,7 @@ function CourseDetails() {
 
               <h2 className="text-5xl font-bold text-indigo-600">
 
-                ${course.price}
+                {course.price}Rs
 
               </h2>
 

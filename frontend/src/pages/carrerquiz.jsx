@@ -331,7 +331,7 @@ export default function CareerQuizPage() {
 
                       <div className="flex items-center justify-between text-sm text-gray-500">
                         <span>
-                          {course.price === 0 ? "Free" : `$${course.price}`}
+                          {course.price === 0 ? "Free" : `${course.price}Rs`}
                         </span>
                         <span>{course.duration}</span>
                       </div>
