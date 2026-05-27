@@ -161,14 +161,21 @@ export default function HomePage() {
 
   const [topCourses, setTopCourses] = useState([]);
   const [topCoursesLoading, setTopCoursesLoading] = useState(true);
+  
 
   useEffect(() => {
+    window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
     const fetchTopCourses = async () => {
       try {
         const response = await fetch("http://localhost:5000/api/courses");
         const data = await response.json();
         if (Array.isArray(data)) {
-          const sorted = [...data].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+          const sorted = [...data].sort(
+            (a, b) => (b.rating || 0) - (a.rating || 0),
+          );
           setTopCourses(sorted.slice(0, 4));
         }
       } catch (error) {
@@ -181,7 +188,8 @@ export default function HomePage() {
     fetchTopCourses();
   }, []);
 
-  const featuredCourses = topCourses.length > 0 ? topCourses : defaultTopCourses;
+  const featuredCourses =
+    topCourses.length > 0 ? topCourses : defaultTopCourses;
 
   return (
     <div className="w-full">
@@ -292,46 +300,50 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {featuredCourses.map((course) => (
-              <div
-                key={course._id ?? course.id}
-                className="bg-white rounded-xl shadow overflow-hidden"
-              >
-                <img
-                  src={course.image}
-                  alt={course.title}
-                  className="w-full h-56 object-cover"
-                />
+              <Link key={course._id} to={`/courses/${course._id}`}>
+                <div
+                  key={course._id ?? course.id}
+                  className="bg-white rounded-xl shadow overflow-hidden"
+                >
+                  <img
+                    src={course.image}
+                    alt={course.title}
+                    className="w-full h-56 object-cover"
+                  />
 
-                <div className="p-6">
-                  <div className="flex justify-between mb-3">
-                    <span className="text-indigo-600 text-sm">
-                      {course.platform}
-                    </span>
+                  <div className="p-6">
+                    <div className="flex justify-between mb-3">
+                      <span className="text-indigo-600 text-sm">
+                        {course.platform}
+                      </span>
 
-                    <span className="font-medium">
-                      {course.price === 0 ? "Free" : `$${course.price}`}
-                    </span>
-                  </div>
-
-                  <h3 className="text-xl font-semibold mb-2">{course.title}</h3>
-
-                  <p className="text-gray-500 mb-4">{course.instructor}</p>
-
-                  <div className="flex justify-between text-sm text-gray-500">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-yellow-500" />
-
-                      {(course.rating || 0).toFixed(1)}
+                      <span className="font-medium">
+                        {course.price === 0 ? "Free" : `$${course.price}`}
+                      </span>
                     </div>
 
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-4 h-4" />
+                    <h3 className="text-xl font-semibold mb-2">
+                      {course.title}
+                    </h3>
 
-                      {course.duration}
+                    <p className="text-gray-500 mb-4">{course.instructor}</p>
+
+                    <div className="flex justify-between text-sm text-gray-500">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-4 h-4 text-yellow-500" />
+
+                        {(course.rating || 0).toFixed(1)}
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" />
+
+                        {course.duration}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
