@@ -86,8 +86,8 @@ export default function CoursesPage() {
     if (filters.priceMax && course.price > parseFloat(filters.priceMax))
       return false;
 
-    // if (filters.rating && course.rating < parseFloat(filters.rating))
-    //   return false;
+    if (filters.rating && course.rating < parseFloat(filters.rating))
+      return false;
 
     if (filters.isFree && course.price > 0) return false;
 
@@ -211,7 +211,66 @@ export default function CoursesPage() {
                     className="w-full px-3 py-2 bg-input-background border border-border rounded-lg text-sm"
                   />
                 </div>
+                <div>
+                  <label className="block text-sm mb-2">Minimum Rating</label>
 
+                  <select
+                    value={filters.rating}
+                    onChange={(e) =>
+                      setFilters({
+                        ...filters,
+                        rating: e.target.value,
+                      })
+                    }
+                    className="w-full px-3 py-2 bg-input-background border border-border rounded-lg text-sm"
+                  >
+                    <option value="">All Ratings</option>
+                    <option value="4">4+ Stars</option>
+                    <option value="3">3+ Stars</option>
+                    <option value="2">2+ Stars</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm mb-2">Platform</label>
+
+                  <select
+                    value={filters.platform}
+                    onChange={(e) =>
+                      setFilters({
+                        ...filters,
+                        platform: e.target.value,
+                      })
+                    }
+                    className="w-full px-3 py-2 bg-input-background border border-border rounded-lg text-sm"
+                  >
+                    <option value="">All Platforms</option>
+                    <option value="Udemy">Udemy</option>
+                    <option value="Coursera">Coursera</option>
+                    <option value="YouTube">YouTube</option>
+                    <option value="Apna College">Apna College</option>
+                  </select>
+                </div>
+
+                <div>
+  <label className="block text-sm mb-2">Level</label>
+
+  <select
+    value={filters.level}
+    onChange={(e) =>
+      setFilters({
+        ...filters,
+        level: e.target.value,
+      })
+    }
+    className="w-full px-3 py-2 bg-input-background border border-border rounded-lg text-sm"
+  >
+    <option value="">All Levels</option>
+    <option value="Beginner">Beginner</option>
+    <option value="Intermediate">Intermediate</option>
+    <option value="Advanced">Advanced</option>
+  </select>
+</div>
                 <button
                   onClick={clearFilters}
                   className="w-full px-4 py-2 text-sm text-primary border border-primary rounded-lg"
