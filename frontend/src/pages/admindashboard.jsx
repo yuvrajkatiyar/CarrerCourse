@@ -1,19 +1,14 @@
-
 import { useEffect, useState } from "react";
 import { Pencil, Trash2, Plus } from "lucide-react";
 
 export default function AdminDashboard() {
-
   const [courses, setCourses] = useState([]);
 
   const [loading, setLoading] = useState(true);
 
   const [editingId, setEditingId] = useState(null);
 
-
-
   const [formData, setFormData] = useState({
-
     title: "",
 
     instructor: "",
@@ -32,124 +27,89 @@ export default function AdminDashboard() {
 
     image: "",
 
+    enrollLink: "",
+
     description: "",
-
   });
-
-
 
   // FETCH COURSES
 
   const fetchCourses = async () => {
-
     try {
-
       const response = await fetch(
-        "https://careercourse-3dj3.onrender.com/api/courses"
+        "https://careercourse-3dj3.onrender.com/api/courses",
       );
 
       const data = await response.json();
 
       setCourses(data);
-
     } catch (error) {
-
       console.log(error);
-
     } finally {
-
       setLoading(false);
     }
   };
 
-
-
   useEffect(() => {
-
     fetchCourses();
-
   }, []);
-
-
 
   // HANDLE INPUT
 
   const handleChange = (e) => {
-
     setFormData({
-
       ...formData,
 
       [e.target.name]: e.target.value,
-
     });
   };
-
-
 
   // ADD / UPDATE COURSE
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
-
-
     try {
-
       if (editingId) {
-
         // UPDATE
-
-        await fetch(
-
-          `https://carrercourse.onrender.com/api/courses/${editingId}`,
-
+        console.log(editingId);
+        const response = await fetch(
+          `https://careercourse-3dj3.onrender.com/api/courses/${editingId}`,
           {
-
             method: "PUT",
 
             headers: {
-
               "Content-Type": "application/json",
-
             },
 
             body: JSON.stringify(formData),
-
-          }
+          },
         );
 
+        const data = await response.json();
 
+        console.log(data);
 
+        await fetchCourses();
       } else {
-
         // CREATE
 
         await fetch(
-
-          "https://carrercourse.onrender.com/api/courses",
+          "https://careercourse-3dj3.onrender.com/api/courses",
 
           {
-
             method: "POST",
 
             headers: {
-
               "Content-Type": "application/json",
-
             },
 
             body: JSON.stringify(formData),
-
-          }
+          },
         );
       }
 
-
-
       setFormData({
-
         title: "",
 
         instructor: "",
@@ -168,62 +128,43 @@ export default function AdminDashboard() {
 
         image: "",
 
+        enrollLink: "",
+
         description: "",
-
       });
-
-
 
       setEditingId(null);
 
       fetchCourses();
-
     } catch (error) {
-
       console.log(error);
     }
   };
-
-
 
   // DELETE COURSE
 
   const handleDelete = async (id) => {
-
     try {
-
       await fetch(
-
-        `https://your-backend-url.onrender.com/api/courses/${id}`,
+        `https://careercourse-3dj3.onrender.com/api/courses/${id}`,
 
         {
-
           method: "DELETE",
-        }
+        },
       );
 
-
-
       fetchCourses();
-
     } catch (error) {
-
       console.log(error);
     }
   };
 
-
-
   // EDIT COURSE
 
   const handleEdit = (course) => {
-
     setEditingId(course._id);
 
-
-
     setFormData({
-
       title: course.title,
 
       instructor: course.instructor,
@@ -242,77 +183,41 @@ export default function AdminDashboard() {
 
       image: course.image,
 
-      description: course.description,
+      enrollLink: course.enrollLink,
 
+      description: course.description,
     });
 
-
-
     window.scrollTo({
-
       top: 0,
 
       behavior: "smooth",
     });
   };
 
-
-
   return (
-
     <div className="min-h-screen bg-gray-100 ">
-
       <div className=" ">
-
         {/* HEADER */}
 
         <div className=" text-center bg-gradient-to-br from-indigo-600 via-indigo-600 to-purple-600 text-white py-28 ">
+          <h1 className="text-4xl font-bold">Admin Dashboard</h1>
 
-          <h1 className="text-4xl font-bold">
-
-            Admin Dashboard
-
-          </h1>
-
-
-
-          <p className="text-white mt-2">
-
-            Manage all courses dynamically
-
-          </p>
-
+          <p className="text-white mt-2">Manage all courses dynamically</p>
         </div>
-
-
 
         {/* FORM */}
 
         <div className="bg-white rounded-2xl shadow p-8 mb-10 m-4 ">
-
           <div className="flex items-center gap-3 mb-6">
-
             <Plus className="w-6 h-6 text-indigo-600" />
 
-
-
             <h2 className="text-2xl font-semibold">
-
-              {editingId
-                ? "Update Course"
-                : "Add New Course"}
-
+              {editingId ? "Update Course" : "Add New Course"}
             </h2>
-
           </div>
 
-
-
-          <form
-            onSubmit={handleSubmit}
-            className="grid md:grid-cols-2 gap-6"
-          >
-
+          <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6">
             <input
               type="text"
               name="title"
@@ -322,8 +227,6 @@ export default function AdminDashboard() {
               className="border rounded-xl px-4 py-3"
               required
             />
-
-
 
             <input
               type="text"
@@ -335,8 +238,6 @@ export default function AdminDashboard() {
               required
             />
 
-
-
             <input
               type="text"
               name="platform"
@@ -346,8 +247,6 @@ export default function AdminDashboard() {
               className="border rounded-xl px-4 py-3"
             />
 
-
-
             <input
               type="number"
               name="price"
@@ -356,8 +255,6 @@ export default function AdminDashboard() {
               onChange={handleChange}
               className="border rounded-xl px-4 py-3"
             />
-
-
 
             <input
               type="number"
@@ -369,8 +266,6 @@ export default function AdminDashboard() {
               className="border rounded-xl px-4 py-3"
             />
 
-
-
             <input
               type="text"
               name="category"
@@ -379,8 +274,6 @@ export default function AdminDashboard() {
               onChange={handleChange}
               className="border rounded-xl px-4 py-3"
             />
-
-
 
             <input
               type="text"
@@ -391,8 +284,6 @@ export default function AdminDashboard() {
               className="border rounded-xl px-4 py-3"
             />
 
-
-
             <input
               type="text"
               name="level"
@@ -401,8 +292,6 @@ export default function AdminDashboard() {
               onChange={handleChange}
               className="border rounded-xl px-4 py-3"
             />
-
-
 
             <input
               type="text"
@@ -413,7 +302,14 @@ export default function AdminDashboard() {
               className="border rounded-xl px-4 py-3 md:col-span-2"
             />
 
-
+            <input
+              type="text"
+              name="enrollLink"
+              placeholder="Enroll Link"
+              value={formData.enrollLink}
+              onChange={handleChange}
+              className="border rounded-xl px-4 py-3 md:col-span-2"
+            />
 
             <textarea
               name="description"
@@ -424,152 +320,78 @@ export default function AdminDashboard() {
               className="border rounded-xl px-4 py-3 md:col-span-2"
             ></textarea>
 
-
-
             <button
               type="submit"
               className="bg-indigo-600 text-white py-3 rounded-xl hover:bg-indigo-700 transition md:col-span-2"
             >
-
-              {editingId
-                ? "Update Course"
-                : "Add Course"}
-
+              {editingId ? "Update Course" : "Add Course"}
             </button>
-
           </form>
-
         </div>
-
-
 
         {/* COURSES */}
 
         <div>
-
-          <h2 className="text-2xl font-semibold mb-6 mx-4 ">
-
-            All Courses
-
-          </h2>
-
-
+          <h2 className="text-2xl font-semibold mb-6 mx-4 ">All Courses</h2>
 
           {loading ? (
-
             <p>Loading courses...</p>
-
           ) : (
-
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
-
               {courses.map((course) => (
-
                 <div
                   key={course._id}
                   className="bg-white rounded-2xl shadow overflow-hidden"
                 >
-
                   <img
                     src={course.image}
                     alt={course.title}
                     className="w-full h-52 object-cover"
                   />
 
-
-
                   <div className="p-5">
-
                     <div className="flex justify-between mb-3">
-
                       <span className="text-indigo-600 text-sm">
-
                         {course.platform}
-
                       </span>
 
-
-
-                      <span className="font-medium">
-
-                        ₹{course.price}
-
-                      </span>
-
+                      <span className="font-medium">₹{course.price}</span>
                     </div>
-
-
 
                     <h3 className="text-xl font-semibold mb-2">
-
                       {course.title}
-
                     </h3>
 
-
-
-                    <p className="text-gray-500 mb-4">
-
-                      {course.instructor}
-
-                    </p>
-
-
+                    <p className="text-gray-500 mb-4">{course.instructor}</p>
 
                     <div className="flex justify-between items-center">
-
                       <span className="text-sm text-gray-500">
-
                         ⭐ {course.rating}
-
                       </span>
 
-
-
                       <div className="flex gap-3">
-
                         <button
-                          onClick={() =>
-                            handleEdit(course)
-                          }
+                          onClick={() => handleEdit(course)}
                           className="p-2 rounded-lg bg-blue-100 text-blue-600"
                         >
-
                           <Pencil className="w-4 h-4" />
-
                         </button>
-
-
 
                         <button
-                          onClick={() =>
-                            handleDelete(course._id)
-                          }
+                          onClick={() => handleDelete(course._id)}
                           className="p-2 rounded-lg bg-red-100 text-red-600"
                         >
-
                           <Trash2 className="w-4 h-4" />
-
                         </button>
-
                       </div>
-
                     </div>
-
                   </div>
-
                 </div>
-
               ))}
-
             </div>
-
           )}
-
         </div>
-
       </div>
-
     </div>
   );
 }
