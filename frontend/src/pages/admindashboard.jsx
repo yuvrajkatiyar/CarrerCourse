@@ -262,7 +262,7 @@ export default function AdminDashboard() {
 
     <div className="min-h-screen bg-gray-100 ">
 
-      <div className="max-w-7xl mx-auto ">
+      <div className=" ">
 
         {/* HEADER */}
 
@@ -288,7 +288,7 @@ export default function AdminDashboard() {
 
         {/* FORM */}
 
-        <div className="bg-white rounded-2xl shadow p-8 mb-10">
+        <div className="bg-white rounded-2xl shadow p-8 mb-10 m-4 ">
 
           <div className="flex items-center gap-3 mb-6">
 
@@ -447,7 +447,7 @@ export default function AdminDashboard() {
 
         <div>
 
-          <h2 className="text-2xl font-semibold mb-6">
+          <h2 className="text-2xl font-semibold mb-6 mx-4 ">
 
             All Courses
 
