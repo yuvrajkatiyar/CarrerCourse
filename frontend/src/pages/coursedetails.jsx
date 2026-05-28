@@ -10,6 +10,17 @@ function CourseDetails() {
   const [course, setCourse] = useState(null);
 
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token");
+
+  const handleEnroll = () => {
+    if (!token) {
+      alert("Please login first");
+      navigate("/login");
+      return;
+    }
+
+    window.open(course.enrollLink, "_blank");
+  };
 
   useEffect(() => {
     const fetchCourse = async () => {
@@ -108,15 +119,12 @@ function CourseDetails() {
               </h2>
             </div>
 
-            
-            <a
-              href={course.enrollLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-indigo-600 text-white px-10 py-4 rounded-2xl text-lg font-semibold hover:bg-indigo-700 transition"
+            <button
+              onClick={handleEnroll}
+              className="px-4 py-2 bg-indigo-600 text-white rounded-lg"
             >
               Enroll Now
-            </a>
+            </button>
           </div>
         </div>
       </div>
