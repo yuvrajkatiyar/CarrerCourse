@@ -46,7 +46,7 @@ export default function CoursesPage() {
     // console.log(url);
     const fetchCourses = async () => {
       try {
-        let url = "http://localhost:5000/api/courses";
+        let url = "https://careercourse-3dj3.onrender.com/api/courses";
 
         if (search) {
           url += `?search=${search}`;

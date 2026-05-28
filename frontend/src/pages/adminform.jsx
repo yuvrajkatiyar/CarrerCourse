@@ -41,7 +41,7 @@ function AdminAddCourse() {
     try {
 
       const response = await fetch(
-        "http://localhost:5000/api/courses",
+        "https://careercourse-3dj3.onrender.com/api/courses",
 
         {
           method: "POST",

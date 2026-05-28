@@ -178,7 +178,7 @@ export default function CareerQuizPage() {
       }
 
       const url =
-        "http://localhost:5000/api/courses" +
+        "https://careercourse-3dj3.onrender.com/api/courses" +
         (params.toString()
           ? `?${params.toString()}`
           : "");
