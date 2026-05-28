@@ -331,8 +331,8 @@ export default function AdminDashboard() {
 
         {/* COURSES */}
 
-        <div>
-          <h2 className="text-2xl font-semibold mb-6 mx-4 ">All Courses</h2>
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-2xl font-semibold mb-6">All Courses</h2>
 
           {loading ? (
             <p>Loading courses...</p>
