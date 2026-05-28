@@ -11,6 +11,7 @@ import Register from "./pages/register.jsx";
 import About from "./pages/about.jsx";
 import Privacypolicy from "./pages/privacypolicy";
 import AdminForm from "./pages/adminform.jsx";
+import AdminDashboard from "./pages/admindashboard.jsx";
 import Login from "./pages/login.jsx";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -25,6 +26,7 @@ function App() {
         <Route path="/carrerquiz" element={<CareerQuiz />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/adminform" element={<AdminForm />} />
+        <Route path="/admindashboard" element={<AdminDashboard />} />
         <Route path="/register" element={<Register />} />
         <Route path="/courses/:id" element={<CourseDetails />} />
         <Route path="/course" element={<Course />} />
